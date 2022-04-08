@@ -1,3 +1,4 @@
+/* exported States */
 'use strict';
 
 class States {

@@ -1,3 +1,4 @@
+/* exported AutoComplete */
 'use strict';
 
 class AutoComplete {
@@ -93,10 +94,10 @@ class AutoComplete {
             const div = document.createElement('div');
             div.classList.add('autocomplete-item');
             div.innerText = item;
-            const html = `<div class="autocomplete-item">${item}</div>`;
             this.container.appendChild(div);
+            // const html = `<div class="autocomplete-item">${item}</div>`;
 
-            div.addEventListener('click', (ev) => {
+            div.addEventListener('click', () => {
                 this.setInput(item);
             }, { once: true });
         });

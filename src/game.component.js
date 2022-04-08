@@ -1,3 +1,5 @@
+/* global Cities, States, AutoComplete, Point */
+/* exported Game */
 'use strict';
 
 const STATE = 0;
@@ -22,29 +24,42 @@ class Game {
             this.submit();
         }
 
-        this.cityNames = Cities.map(city => city[NAME]);
+        this.evaluateParams();
 
-        this.city = Cities[Math.round(Math.random() * Cities.length)];
-
-        this.ac = new AutoComplete(this.input, this.cityNames);
-
-        this.gameHash();
+        const cityNames = Cities.map(city => city[NAME]);
+        this.ac = new AutoComplete(this.input, cityNames);
 
         this.input.focus();
     }
 
-    gameHash() {
-        const today = new Date();
-        const idx = Cities.indexOf(this.city);
-        const datePart = `${today.getYear()}${today.getMonth()}${today.getDay()}`;
-        const cityPart = idx + 1337;
-        const fullHash = `${cityPart}`;
+    evaluateParams() {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
 
-        const cityHash = cityPart.toString(16);
+        if (params.game) {
+            this.city = this.parseHash(params.game);
+            this.gameHash = params.game;
+        } else {
+            const idx = Math.floor(Math.random() * Cities.length)
+            this.city = Cities[idx];
+            this.gameHash = this.createHash(idx);
+        }
+    }
 
-        const div = document.createElement('div');
-        div.innerText = cityHash + ", " + fullHash;
-        document.body.appendChild(div);
+    parseHash(hash) {
+        const num = parseInt(hash, 16);
+        return Cities[num % Cities.length];
+    }
+
+    createHash(num) {
+        const min = 100_000;
+        const max = 1_000_000;
+
+        const pseudoRnd = Math.floor(Math.random() * (max - min + 1)) + min;
+        const hashNum = pseudoRnd - (pseudoRnd % Cities.length) + num;
+        
+        return hashNum.toString(16);
     }
 
     addResult(name, state, dir, dist) {
@@ -123,7 +138,6 @@ class Game {
 
         if (!this.cityNames.includes(value)) {
             const parent = this.input.parentElement;
-            console.log(parent);
             parent.querySelectorAll('.not-found').forEach(el => {
                 parent.removeChild(el);
             });
