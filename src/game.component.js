@@ -25,6 +25,7 @@ class Game {
         }
 
         this.evaluateParams();
+        console.log(this.city);
 
         const cityNames = Cities.map(city => city[NAME]);
         this.ac = new AutoComplete(this.input, cityNames);
@@ -135,8 +136,9 @@ class Game {
     submit() {
 
         const value = this.input.value.trim();
+        const findCity = city => city[NAME].toLowerCase() === value.toLowerCase();
 
-        if (!this.cityNames.includes(value)) {
+        if (!Cities.some(findCity)) {
             const parent = this.input.parentElement;
             parent.querySelectorAll('.not-found').forEach(el => {
                 parent.removeChild(el);
@@ -147,11 +149,11 @@ class Game {
             return;
         }
 
-        const guessed = Cities.find(city => city[NAME] === value);
+        const guessed = Cities.find(findCity);
         const state = States.byId(guessed[STATE]);
 
-        if (this.city[NAME] === value) {
-            this.addResult(value, state, 'check', 0);
+        if (this.city === guessed) {
+            this.addResult(guessed[NAME], state, 'check', 0);
             this.gameEnded(true);
             return;
         }
