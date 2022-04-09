@@ -13,16 +13,14 @@ class Game {
 
     constructor() {
         this.round = 0;
-        this.bestGuess = {
-            dist: 10000,
-            idx: -1
-        };
+        this.guesses = [];
 
         this.results = document.querySelector('.results');
         this.input = document.querySelector('#guess');
 
         this.input.form.onsubmit = (evt) => {
             evt.preventDefault();
+            evt.stopPropagation();
             this.submit();
         };
 
@@ -65,7 +63,16 @@ class Game {
         return hashNum.toString(16);
     }
 
-    addResult(name, state, correct = false, dist = 0, angle = 0) {
+    addResult(city, correct = false, dist = 0, angle = 0) {
+        const state = States.byId(city[STATE]);
+
+        this.guesses.push({
+            city: city,
+            correct: correct,
+            dist: dist,
+            angle: angle
+        });
+
         let arrow = null;
         if (correct) {
             arrow = '<i class="fa-solid fa-face-laugh-beam"></i>';
@@ -78,7 +85,7 @@ class Game {
         const html =
             `<div class="result row slide-in">
                 <div class="name">
-                    <span>${name}</span>
+                    <span>${city[NAME]}</span>
                     <span class="state">${state}</span>
                 </div>
                 <div class="dir">${arrow}</div>
@@ -150,21 +157,19 @@ class Game {
         const findCity = city => city[NAME].toLowerCase() === value.toLowerCase();
 
         if (!Cities.some(findCity)) {
-            const parent = this.input.parentElement;
-            parent.querySelectorAll('.not-found').forEach(el => {
-                parent.removeChild(el);
-            });
-
-            const html = `<div class="not-found"><i class="fa-solid fa-xmark"></i></div>`;
-            this.input.insertAdjacentHTML('afterend', html);
+            this.markInvalid();
             return;
         }
 
         const guessed = Cities.find(findCity);
-        const state = States.byId(guessed[STATE]);
+
+        if (this.guesses.map(g => g.city[NAME]).some(name => name === guessed[NAME])) {
+            this.markInvalid();
+            return;
+        }
 
         if (this.city === guessed) {
-            this.addResult(guessed[NAME], state, true);
+            this.addResult(guessed, true);
             this.gameEnded(true);
             return;
         }
@@ -175,21 +180,25 @@ class Game {
         const direction = this.getAngle(p1, p2);
         const distance = this.distanceBetween(p1, p2);
 
-        this.addResult(value, state, false, distance, direction);
-        this.advanceRound(distance);
+        this.addResult(guessed, false, distance, direction);
+        this.advanceRound();
 
         this.input.value = '';
         this.ac.close();
         this.input.focus();
     }
 
-    advanceRound(distance) {
+    markInvalid() {
+        const parent = this.input.parentElement;
+        parent.querySelectorAll('.not-found').forEach(el => {
+            parent.removeChild(el);
+        });
 
-        if (distance < this.bestGuess.dist) {
-            this.bestGuess.dist = distance;
-            this.bestGuess.idx = this.round;
-        }
+        const html = `<div class="not-found"><i class="fa-solid fa-xmark"></i></div>`;
+        this.input.insertAdjacentHTML('afterend', html);
+    }
 
+    advanceRound() {
         this.round += 1;
 
         if (this.round > 4) {
@@ -200,6 +209,12 @@ class Game {
 
     gameEnded(perfect = false) {
         this.input.parentElement.remove(this.input);
+
+        const bestGuess = this.guesses.reduce((a, b) => {
+            if (a == null) { return b; }
+            else if (b.dist < a.dist) { return b; }
+            else { return a; }
+        }, null);
 
         const html = `
             <div class="result row goal">
@@ -216,7 +231,7 @@ class Game {
         if (perfect) {
             this.results.lastChild.classList.add('perfect');
         } else {
-            this.results.children[this.bestGuess.idx].classList.add('best');
+            this.results.children[bestGuess.indexOf(bestGuess)].classList.add('best');
         }
 
         document.querySelector('.reload').addEventListener('click', () => window.location.reload());
@@ -257,6 +272,11 @@ class Game {
         const modal = document.querySelector('.modal');
         modal.remove();
         overlay.remove();
+    }
+
+    copyToClipboard() {
+
+        navigator.clipboard.writeText();
     }
 
 }
