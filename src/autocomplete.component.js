@@ -42,7 +42,7 @@ class AutoComplete {
             return true;
         }
 
-        if (evt.key === 'Enter') {
+        if (evt.key === 'Enter' && this.idx >= 0) {
             evt.preventDefault();
             evt.stopPropagation();
 

@@ -123,7 +123,14 @@ input {
 }
 
 .modal {
-    position: absolute;
+    background: #333;
+    padding: 20px;
+    position: fixed;
+    min-width: 50%;
+    max-width: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
     z-index: 250;
 }
 
@@ -148,15 +155,13 @@ form {
 .not-found {
     position: absolute;
     top: 5px;
-    right: 5px;
+    right: 10px;
     opacity: 0;
     animation: fadeInOut 2s;
 }
 
-.not-found:before {
-    content: '❌';
-    font-size: 20px;
-    line-height: 20px;
+.clickable {
+    cursor: pointer;
 }
 
 @keyframes fadeInOut {

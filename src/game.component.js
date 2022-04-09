@@ -7,6 +7,8 @@ const NAME = 1;
 const LAT = 2;
 const LON = 3;
 
+const BASE_PATH = 'https://stefangaertner.net/staedtle';
+
 class Game {
 
     constructor() {
@@ -22,7 +24,7 @@ class Game {
         this.input.form.onsubmit = (evt) => {
             evt.preventDefault();
             this.submit();
-        }
+        };
 
         this.evaluateParams();
         console.log(this.city);
@@ -42,7 +44,7 @@ class Game {
             this.city = this.parseHash(params.game);
             this.gameHash = params.game;
         } else {
-            const idx = Math.floor(Math.random() * Cities.length)
+            const idx = Math.floor(Math.random() * Cities.length);
             this.city = Cities[idx];
             this.gameHash = this.createHash(idx);
         }
@@ -62,14 +64,14 @@ class Game {
 
         return hashNum.toString(16);
     }
-    
+
     addResult(name, state, correct = false, dist = 0, angle = 0) {
         let arrow = null;
         if (correct) {
             arrow = '<i class="fa-solid fa-face-laugh-beam"></i>';
         } else {
             const rotAngle = angle - 45;
-            const rot = `transform: rotate(${rotAngle}deg)`
+            const rot = `transform: rotate(${rotAngle}deg)`;
             arrow = `<i class="fa-solid fa-location-arrow" style="${rot}"></i>`;
         }
 
@@ -103,8 +105,8 @@ class Game {
         const lat2 = this.deg2rad(p2.x);
         const lon2 = this.deg2rad(p2.y);
 
-        const delta_lat = lat2 - lat1
-        const delta_lon = lon2 - lon1
+        const delta_lat = lat2 - lat1;
+        const delta_lon = lon2 - lon1;
 
         const a = Math.sin(delta_lat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(delta_lon / 2) ** 2;
         const c = 2 * Math.asin(Math.sqrt(a));
@@ -152,9 +154,9 @@ class Game {
             parent.querySelectorAll('.not-found').forEach(el => {
                 parent.removeChild(el);
             });
-            const div = document.createElement('div');
-            div.classList.add('not-found');
-            parent.appendChild(div);
+
+            const html = `<div class="not-found"><i class="fa-solid fa-xmark"></i></div>`;
+            this.input.insertAdjacentHTML('afterend', html);
             return;
         }
 
@@ -205,8 +207,8 @@ class Game {
                     <span>${this.city[NAME]}</span>
                     <span class="state">${States.byId(this.city[STATE])}</span>
                 </div>
-                <div class="dir "><i class="fa-solid fa-arrow-rotate-right"></i></div>
-                <div class="dist"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="dir reload clickable"><i class="fa-solid fa-arrow-rotate-right"></i></div>
+                <div class="dist show-result-details clickable"><i class="fa-solid fa-circle-info"></i></div>
             </div>`;
 
         document.querySelector('.container').insertAdjacentHTML('beforeend', html);
@@ -217,10 +219,13 @@ class Game {
             this.results.children[this.bestGuess.idx].classList.add('best');
         }
 
-        document.querySelector('.show-result-details').addEventListener('click', () => this.openResultDetails);
+        document.querySelector('.reload').addEventListener('click', () => window.location.reload());
+        document.querySelector('.show-result-details').addEventListener('click', () => this.openResultDetails());
     }
 
     openResultDetails() {
+        const URL = `${BASE_PATH}?game=${this.gameHash}`;
+
         const html = `
             <div class="overlay"></div>
             <div class="modal">
@@ -228,9 +233,30 @@ class Game {
                     <span class="name">${this.city[NAME]}</span>
                     <span class="state">${States.byId(this.city[STATE])}</span>
                 </div>
-                <
+                <div class="result">
+                    <div class="clickable share">Share / Challenge</div>
+                </div>
             </div>`;
 
+        document.body.insertAdjacentHTML('beforeend', html);
+
+        document.querySelector('.overlay').addEventListener('click', () => this.hideResultDetails());
+        document.body.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Escape') {
+                this.hideResultDetails();
+            }
+        }, { once: true });
+
+        document.querySelector('.share').addEventListener('click', () => {
+            URL;
+        });
+    }
+
+    hideResultDetails() {
+        const overlay = document.querySelector('.overlay');
+        const modal = document.querySelector('.modal');
+        modal.remove();
+        overlay.remove();
     }
 
 }
