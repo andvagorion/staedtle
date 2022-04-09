@@ -59,18 +59,27 @@ class Game {
 
         const pseudoRnd = Math.floor(Math.random() * (max - min + 1)) + min;
         const hashNum = pseudoRnd - (pseudoRnd % Cities.length) + num;
-        
+
         return hashNum.toString(16);
     }
+    
+    addResult(name, state, correct = false, dist = 0, angle = 0) {
+        let arrow = null;
+        if (correct) {
+            arrow = '<i class="fa-solid fa-face-laugh-beam"></i>';
+        } else {
+            const rotAngle = angle - 45;
+            const rot = `transform: rotate(${rotAngle}deg)`
+            arrow = `<i class="fa-solid fa-location-arrow" style="${rot}"></i>`;
+        }
 
-    addResult(name, state, dir, dist) {
         const html =
             `<div class="result row slide-in">
                 <div class="name">
                     <span>${name}</span>
                     <span class="state">${state}</span>
                 </div>
-                <div class="dir"><span class="${dir}"></span></div>
+                <div class="dir">${arrow}</div>
                 <div class="dist">${dist} km</dist>
             </div>`;
 
@@ -153,7 +162,7 @@ class Game {
         const state = States.byId(guessed[STATE]);
 
         if (this.city === guessed) {
-            this.addResult(guessed[NAME], state, 'check', 0);
+            this.addResult(guessed[NAME], state, true);
             this.gameEnded(true);
             return;
         }
@@ -161,14 +170,14 @@ class Game {
         const p1 = new Point(guessed[LAT], guessed[LON]);
         const p2 = new Point(this.city[LAT], this.city[LON]);
 
-        const direction = this.directionBetween(p1, p2);
+        const direction = this.getAngle(p1, p2);
         const distance = this.distanceBetween(p1, p2);
 
-        this.addResult(value, state, direction, distance);
+        this.addResult(value, state, false, distance, direction);
         this.advanceRound(distance);
 
         this.input.value = '';
-        this.ac.closeAutocomplete();
+        this.ac.close();
         this.input.focus();
     }
 
@@ -196,19 +205,32 @@ class Game {
                     <span>${this.city[NAME]}</span>
                     <span class="state">${States.byId(this.city[STATE])}</span>
                 </div>
-                <div class="dir"></div>
-                <div class="dist"></div>
+                <div class="dir "><i class="fa-solid fa-arrow-rotate-right"></i></div>
+                <div class="dist"><i class="fa-solid fa-circle-info"></i></div>
             </div>`;
 
-        window.setTimeout(() => {
-            document.querySelector('.container').insertAdjacentHTML('beforeend', html);
-        }, 500);
+        document.querySelector('.container').insertAdjacentHTML('beforeend', html);
 
         if (perfect) {
             this.results.lastChild.classList.add('perfect');
         } else {
             this.results.children[this.bestGuess.idx].classList.add('best');
         }
+
+        document.querySelector('.show-result-details').addEventListener('click', () => this.openResultDetails);
+    }
+
+    openResultDetails() {
+        const html = `
+            <div class="overlay"></div>
+            <div class="modal">
+                <div class="result">
+                    <span class="name">${this.city[NAME]}</span>
+                    <span class="state">${States.byId(this.city[STATE])}</span>
+                </div>
+                <
+            </div>`;
+
     }
 
 }

@@ -11,6 +11,7 @@ body {
 body,
 input {
     font-size: 20px;
+    line-height: 24px;
     font-family: 'Roboto Slab', serif;
     font-weight: 400;
     font-style: normal;
@@ -75,7 +76,12 @@ input {
 }
 
 .result.goal {
-    font-size: 1.2em;
+    line-height: 32px;
+    padding-bottom: 7px;
+}
+
+.result.goal .name {
+    font-size: 28px;
 }
 
 .dir {
@@ -87,51 +93,6 @@ input {
     font-family: sans-serif;
     font-size: 1.25em;
     line-height: 1em;
-}
-
-.dir .west,
-.dir .east {
-    line-height: .5em;
-}
-
-.dir .check:before {
-    content: '😎';
-}
-
-.dir span.check {
-    font-size: 1em;
-}
-
-.dir .west:before {
-    content: '\21D0';
-}
-
-.dir .north:before {
-    content: '\21D1';
-}
-
-.dir .east:before {
-    content: '\21D2';
-}
-
-.dir .south:before {
-    content: '\21D3';
-}
-
-.dir .northwest:before {
-    content: '\21D6';
-}
-
-.dir .northeast:before {
-    content: '\21D7';
-}
-
-.dir .southwest:before {
-    content: '\21D9';
-}
-
-.dir .southeast:before {
-    content: '\21D8';
 }
 
 .autocomplete {
@@ -161,7 +122,7 @@ input {
     background: rgba(0, 0, 0, .9);
 }
 
-.with-overlay {
+.modal {
     position: absolute;
     z-index: 250;
 }

@@ -7,6 +7,7 @@ class AutoComplete {
         this.input = input;
         this.items = items;
 
+        this.prev = null;
         this.active = false;
         this.idx = -1;
 
@@ -18,44 +19,57 @@ class AutoComplete {
         this.input.insertAdjacentHTML('afterend', html);
         this.container = document.querySelector('.autocomplete');
 
-        this.input.addEventListener('keyup', (evt) => this.onkey(evt))
+        this.input.addEventListener('keydown', (evt) => this.onKey(evt));
+        this.input.addEventListener('input', (evt) => this.onInput(evt));
     }
 
-    onkey(evt) {
+    onInput(evt) {
+        this.close();
 
-        if (this.active && evt.key === 'Enter') {
-            if (this.idx >= 0) {
-                this.setInput(this.currentElement().innerText);
-            }
+        const curr = this.input.value;
+
+        if (curr == null || curr.length < 1 || curr === this.prev) {
             return;
         }
 
-        if (this.active && evt.key === 'ArrowDown') {
+        this.prev = curr;
+
+        this.open(curr);
+    }
+
+    onKey(evt) {
+        if (!this.active) {
+            return true;
+        }
+
+        if (evt.key === 'Enter') {
             evt.preventDefault();
+            evt.stopPropagation();
+
+            this.selectItem();
+        } else if (evt.key === 'ArrowDown') {
+            evt.preventDefault();
+            evt.stopPropagation();
+
             this.nextItem();
-            return;
-        }
-
-        if (this.active && evt.key === 'ArrowUp') {
+        } else if (evt.key === 'ArrowUp') {
             evt.preventDefault();
+            evt.stopPropagation();
+
             this.prevItem();
-            return;
         }
 
-        this.closeAutocomplete();
-
-        const inputValue = this.input.value;
-
-        if (!inputValue || inputValue.length < 1) {
-            return;
-        }
-
-        this.initAutoCompleteItems(inputValue);
-        this.active = true;
-
+        return false;
     }
 
-    prevItem = () => {
+    selectItem() {
+        if (this.idx >= 0) {
+            this.setInput(this.currentElement().innerText);
+            this.close();
+        }
+    }
+
+    prevItem() {
         if (this.idx <= 0) {
             return;
         }
@@ -69,11 +83,7 @@ class AutoComplete {
         this.currentElement().scrollIntoView();
     }
 
-    currentElement() {
-        return this.container.children[this.idx];
-    }
-
-    nextItem = () => {
+    nextItem() {
         if (this.idx >= this.container.children.length - 1) {
             return;
         }
@@ -87,7 +97,11 @@ class AutoComplete {
         this.currentElement().scrollIntoView();
     }
 
-    initAutoCompleteItems = (inputValue) => {
+    currentElement() {
+        return this.container.children[this.idx];
+    }
+
+    open(inputValue) {
         const filtered = this.items.filter(name => name.toLowerCase().startsWith(inputValue.toLowerCase()));
 
         filtered.forEach(item => {
@@ -101,16 +115,20 @@ class AutoComplete {
                 this.setInput(item);
             }, { once: true });
         });
+
+        this.active = true;
     }
 
     setInput(item) {
-        this.closeAutocomplete();
+        this.close();
         this.input.value = item;
         this.input.focus();
     }
 
-    closeAutocomplete = () => {
+    close() {
         this.container.innerHTML = '';
+
+        this.prev = null;
         this.active = false;
         this.idx = -1;
     }
