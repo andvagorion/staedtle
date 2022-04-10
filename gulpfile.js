@@ -27,6 +27,7 @@ const paths = {
             './src/js/map.data.js',
             './src/js/geo.util.js',
             './src/js/toast.util.js',
+            './src/js/theme.util.js',
             './src/js/point.util.js',
             './src/js/coordinates.util.js',
             './src/js/states.data.js',

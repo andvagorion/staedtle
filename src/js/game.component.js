@@ -28,11 +28,6 @@ class Game {
         this.ac = new AutoComplete(this.input, cityNames);
         this.resultDialog = new ResultDialog();
 
-        document.querySelector('.change-theme').addEventListener('click', () => {
-            document.body.classList.toggle('light');
-            document.body.classList.toggle('dark');
-        });
-
         this.input.focus();
     }
 
