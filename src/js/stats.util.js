@@ -20,14 +20,13 @@ const Stats = {
 
         document.body.insertAdjacentHTML('beforeend', html);
 
-
         if (stats.gamesPlayed > 0) {
 
             const container = document.querySelector('.rounds');
             [0, 1, 2, 3, 4, 5].forEach(num => {
                 const res = parseInt(stats.rounds[num]);
                 const pct = res / stats.gamesPlayed * 100;
-                const val = res > 4 ? 'x' : num + 1;
+                const val = res > 4 ? '-' : num + 1;
                 const round = `
                     <div class="round flex">
                         <div class="num flex-static">${val}</div>
@@ -60,7 +59,7 @@ const Stats = {
         return {
             gamesPlayed: 0,
             rounds: [0, 0, 0, 0, 0, 0],
-            averageDistance: -1
+            averageDistance: 0
         };
     },
 
@@ -68,7 +67,7 @@ const Stats = {
         const stats = this.loadStats();
         stats.gamesPlayed += 1;
         stats.rounds[rounds] += 1;
-        stats.averageDistance = this.addToAverageDistance(stats.gamesPlayed, stats.averageDistance, dist);
+        stats.averageDistance = this.addToAverageDistance(stats.gamesPlayed - 1, stats.averageDistance, dist);
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
     },

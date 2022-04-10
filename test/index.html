@@ -18,12 +18,22 @@
     <script class="mocha-init">
         mocha.setup('bdd');
         mocha.checkLeaks();
+
+        const expect = chai.expect;
     </script>
-    <script src="../src/coordinates.util.js"></script>
-    <script src="../src/point.util.js"></script>
-    <script src="../src/cities.data.js"></script>
-    <script src="../src/game.component.js"></script>
+    <script src="../src/js/geo.util.js"></script>
+    <script src="../src/js/coordinates.util.js"></script>
+    <script src="../src/js/point.util.js"></script>
+    <script src="../src/js/cities.data.js"></script>
+
+    <script src="../src/js/result.dialog.js"></script>
+    <script src="../src/js/stats.util.js"></script>
+    <script src="../src/js/game.component.js"></script>
+
+    <script src="result.dialog.spec.js"></script>
+    <script src="stats.util.spec.js"></script>
     <script src="game.component.spec.js"></script>
+
     <script class="mocha-exec">
         mocha.run();
     </script>
