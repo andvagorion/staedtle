@@ -11,6 +11,9 @@ class ResultDialog {
         const html = `
             <div class="overlay"></div>
             <div class="modal centered">
+                <div class="close-dialog big-icon in-corner clickable">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
                 <div class="row">
                     <div class="map">
                         ${MAP}
@@ -37,6 +40,7 @@ class ResultDialog {
                 this.hide();
             }
         }, { once: true });
+        document.querySelector('.close-dialog').addEventListener('click', () => this.hide());
 
         document.querySelector('.share').addEventListener('click', () => {
             const str = this.buildShareString(options);
