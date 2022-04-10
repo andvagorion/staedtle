@@ -1,4 +1,4 @@
-/* global Cities, States, AutoComplete, Point */
+/* global Cities, States, AutoComplete, Point, Toast, Coordinates, MAP */
 /* exported Game */
 'use strict';
 
@@ -8,6 +8,7 @@ const LAT = 2;
 const LON = 3;
 
 const BASE_PATH = 'https://stefangaertner.net/staedtle';
+const MAP_WIDTH = 410, MAP_HEIGHT = 555;
 
 class Game {
 
@@ -83,7 +84,7 @@ class Game {
         }
 
         const html =
-            `<div class="result row slide-in">
+            `<div class="result row flex slide-in">
                 <div class="name">
                     <span>${city[NAME]}</span>
                     <span class="state">${state}</span>
@@ -217,7 +218,7 @@ class Game {
         }, null);
 
         const html = `
-            <div class="result row goal">
+            <div class="result row flex goal">
                 <div class="name">
                     <span>${this.city[NAME]}</span>
                     <span class="state">${States.byId(this.city[STATE])}</span>
@@ -231,29 +232,60 @@ class Game {
         if (perfect) {
             this.results.lastChild.classList.add('perfect');
         } else {
-            this.results.children[bestGuess.indexOf(bestGuess)].classList.add('best');
+            this.results.children[this.guesses.indexOf(bestGuess)].classList.add('best');
         }
 
         document.querySelector('.reload').addEventListener('click', () => window.location.reload());
         document.querySelector('.show-result-details').addEventListener('click', () => this.openResultDetails());
     }
 
-    openResultDetails() {
-        const URL = `${BASE_PATH}?game=${this.gameHash}`;
+    toPixels(coords) {
+        const mapBounds = {
+            west: 5.865010,
+            east: 15.043380,
+            north: 55.057722,
+            south: 47.269133
+        };
 
+        const deltaX = mapBounds.east - mapBounds.west;
+
+        const x = (coords.lon - mapBounds.west) * (MAP_WIDTH / deltaX);
+
+        const bottom = this.deg2rad(mapBounds.south);
+
+        const lat = this.deg2rad(coords.lat);
+        const totalWidth = ((MAP_WIDTH / deltaX) * 360) / (2 * Math.PI);
+        const offsetY = (totalWidth / 2 * Math.log((1 + Math.sin(bottom)) / (1 - Math.sin(bottom))));
+        const y = MAP_HEIGHT - ((totalWidth / 2 * Math.log((1 + Math.sin(lat)) / (1 - Math.sin(lat)))) - offsetY);
+
+        return new Point(Math.round(x), Math.round(y));
+    }
+
+    openResultDetails() {
         const html = `
             <div class="overlay"></div>
-            <div class="modal">
-                <div class="result">
-                    <span class="name">${this.city[NAME]}</span>
-                    <span class="state">${States.byId(this.city[STATE])}</span>
-                </div>
-                <div class="result">
-                    <div class="clickable share">Share / Challenge</div>
+            <div class="modal centered">
+                <div class="flex">
+                    <div class="map" style="width: ${MAP_WIDTH}px; height:${MAP_HEIGHT}px;">
+                        ${MAP}
+                    </div>
+                    <div class="flex-dynamic">
+                        <div class="width-90">
+                            <h2>${this.city[NAME]}</h2>
+                            <p>${States.byId(this.city[STATE])}</p>
+                            <div class="clickable share">
+                                <i class="fa-solid fa-square-share-nodes"></i>
+                                <span>Share / Challenge</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>`;
 
         document.body.insertAdjacentHTML('beforeend', html);
+
+        const targetCity = new Coordinates(this.city[LON], this.city[LAT]);
+        this.addToMap(targetCity);
 
         document.querySelector('.overlay').addEventListener('click', () => this.hideResultDetails());
         document.body.addEventListener('keydown', (evt) => {
@@ -263,8 +295,54 @@ class Game {
         }, { once: true });
 
         document.querySelector('.share').addEventListener('click', () => {
-            URL;
+            const str = this.buildShareString();
+            try {
+                navigator.clipboard.writeText(str);
+                Toast.toast('Copied to clipboard.');
+            } catch (error) {
+                console.log(error);
+            }
         });
+    }
+
+    addToMap(coords) {
+        const pxCoords = this.toPixels(coords);
+        const html = `
+            <div class="map-point" 
+                 style="left: ${pxCoords.x}px; top: ${pxCoords.y}px">
+                 <i class="fa-solid fa-location-dot centered-marker"></i>
+            </div>`;
+        document.querySelector('.map').insertAdjacentHTML('beforeend', html);
+    }
+
+    buildShareString() {
+        const found = this.guesses.some(guess => guess.correct);
+        const num = found ? this.guesses.length : 'x';
+        const header = `Städtle ${num}/5`;
+
+        const lines = this.guesses.map(guess => {
+            return `... ${this.toEmoji(guess)} ${guess.dist} km`;
+        }).join('\n');
+
+        const URL = `${BASE_PATH}?game=${this.gameHash}`;
+
+        return `${header}\n\n${lines}\n\n${URL}`;
+    }
+
+    toEmoji(guess) {
+        if (guess.correct) {
+            return '☑️';
+        }
+
+        const angle = guess.angle + 22.5;
+        if (angle < 45) { return '⬆️'; }
+        else if (angle < 90) { return '↗️'; }
+        else if (angle < 135) { return '➡️'; }
+        else if (angle < 180) { return '↘️'; }
+        else if (angle < 225) { return '⬇️'; }
+        else if (angle < 270) { return '↙️'; }
+        else if (angle < 315) { return '⬅️'; }
+        else { return '↖️'; }
     }
 
     hideResultDetails() {

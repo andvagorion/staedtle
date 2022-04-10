@@ -44,10 +44,21 @@ input {
 }
 
 .result {
-    display: flex;
-    flex-direction: row;
     padding: 5px 7px;
     background: #333;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-fixed {
+    flex: 0 1 auto;
+}
+
+.flex-dynamic {
+    flex: 1 1 auto;
 }
 
 .result .name {
@@ -128,10 +139,13 @@ input {
     position: fixed;
     min-width: 50%;
     max-width: 90%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    top: 50%;
     z-index: 250;
+}
+
+.centered {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 @keyframes fadeIn {
@@ -162,6 +176,44 @@ form {
 
 .clickable {
     cursor: pointer;
+}
+
+.toaster {
+    z-index: 1000;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.toaster .toast {
+    opacity: 0;
+    padding: 20px;
+    background: #333;
+    color: #fff;
+}
+
+.map {
+    position: relative;
+}
+
+.map-point {
+    position: absolute;
+}
+
+.centered-marker {
+    transform: translate(-50%, -95%);
+}
+
+svg path {
+    stroke-width: 1px;
+    fill: #111;
+    stroke: #333;
+    stroke-linecap: round;
+}
+
+.width-90 {
+    width: 90%;
+    margin: 0 auto;
 }
 
 @keyframes fadeInOut {
