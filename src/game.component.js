@@ -26,7 +26,6 @@ class Game {
         };
 
         this.evaluateParams();
-        console.log(this.city);
 
         const cityNames = Cities.map(city => city[NAME]);
         this.ac = new AutoComplete(this.input, cityNames);
@@ -265,19 +264,17 @@ class Game {
         const html = `
             <div class="overlay"></div>
             <div class="modal centered">
-                <div class="flex">
-                    <div class="map" style="width: ${MAP_WIDTH}px; height:${MAP_HEIGHT}px;">
+                <div class="row">
+                    <div class="map">
                         ${MAP}
                     </div>
-                    <div class="flex-dynamic">
-                        <div class="width-90">
-                            <h2>${this.city[NAME]}</h2>
-                            <p>${States.byId(this.city[STATE])}</p>
-                            <div class="clickable share">
-                                <i class="fa-solid fa-square-share-nodes"></i>
-                                <span>Share / Challenge</span>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <h2>${this.city[NAME]}</h2>
+                    <p>${States.byId(this.city[STATE])}</p>
+                    <div class="clickable share">
+                        <i class="fa-solid fa-square-share-nodes"></i>
+                        <span>Share / Challenge</span>
                     </div>
                 </div>
             </div>`;
@@ -307,9 +304,11 @@ class Game {
 
     addToMap(coords) {
         const pxCoords = this.toPixels(coords);
+        const pctX = pxCoords.x / MAP_WIDTH * 100;
+        const pctY = pxCoords.y / MAP_HEIGHT * 100;
         const html = `
             <div class="map-point" 
-                 style="left: ${pxCoords.x}px; top: ${pxCoords.y}px">
+                 style="left: ${pctX}%; top: ${pctY}%;">
                  <i class="fa-solid fa-location-dot centered-marker"></i>
             </div>`;
         document.querySelector('.map').insertAdjacentHTML('beforeend', html);
