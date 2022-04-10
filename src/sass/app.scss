@@ -4,6 +4,7 @@
 
 @import 'reset';
 @import 'themes';
+@import 'animations';
 
 html {
     @extend %default-font-style;
@@ -100,16 +101,6 @@ h2 {
     transform: translate(-50%, -50%);
 }
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0.5;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
 .slide-in {
     animation: fadeIn 1s;
 }
@@ -177,20 +168,13 @@ svg path {
     margin: 0 auto;
 }
 
-@keyframes fadeInOut {
-    0% {
-        opacity: 0;
-    }
+.in-corner {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+}
 
-    16% {
-        opacity: 1;
-    }
-
-    84% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
+.big-icon {
+    font-size: 2rem;
+    line-height: 1rem;
 }
