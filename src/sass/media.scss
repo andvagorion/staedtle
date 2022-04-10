@@ -1,0 +1,9 @@
+$Small: 300px;
+$Medium: 750px;
+$Large: 1080px;
+
+@mixin mobile() {
+    @media only screen and (max-width: $Medium) {
+        @content;
+    }
+}

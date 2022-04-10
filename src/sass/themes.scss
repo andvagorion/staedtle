@@ -1,0 +1,25 @@
+body.dark {
+    --main-background-color: #111;
+    --main-container-color: #333;
+    --main-border-color: #555;
+    --main-font-color: #eee;
+
+    --main-overlay-color: rgba(0, 0, 0, .9);
+    --main-hover-color: #082c6c;
+
+    --result-perfect-color: #161;
+    --result-best-color: rgb(112, 67, 7);
+}
+
+body.light {
+    --main-background-color: #eee;
+    --main-container-color: #bbb;
+    --main-border-color: #777;
+    --main-font-color: #111;
+
+    --main-overlay-color: rgba(200, 200, 200, .9);
+    --main-hover-color: rgb(0, 149, 255);
+
+    --result-perfect-color: rgb(38, 154, 38);
+    --result-best-color: rgb(193, 158, 43);
+}

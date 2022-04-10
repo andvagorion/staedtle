@@ -1,0 +1,39 @@
+@use 'media';
+
+.overlay {
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--main-overlay-color);
+}
+
+.modal {
+    display: flex;
+    flex-direction: row;
+    width: 1000px;
+
+    background: var(--main-container-color);
+    padding: 20px;
+    position: fixed;
+    max-width: 90%;
+    max-height: 90%;
+
+    z-index: 250;
+
+    @include media.mobile {
+        display: block;
+        width: 90%;
+    }
+
+    .row {
+        width: 50%;
+
+        @include media.mobile {
+            width: 100%;
+        }
+    }
+
+}

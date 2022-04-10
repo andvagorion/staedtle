@@ -30,6 +30,11 @@ class Game {
         const cityNames = Cities.map(city => city[NAME]);
         this.ac = new AutoComplete(this.input, cityNames);
 
+        document.querySelector('.change-theme').addEventListener('click', () => {
+            document.body.classList.toggle('light');
+            document.body.classList.toggle('dark');
+        });
+
         this.input.focus();
     }
 
@@ -84,12 +89,12 @@ class Game {
 
         const html =
             `<div class="result row flex slide-in">
-                <div class="name">
+                <div class="name flex-dynamic">
                     <span>${city[NAME]}</span>
                     <span class="state">${state}</span>
                 </div>
-                <div class="dir">${arrow}</div>
-                <div class="dist">${dist} km</dist>
+                <div class="dir flex-fixed">${arrow}</div>
+                <div class="dist flex-fixed">${dist} km</dist>
             </div>`;
 
         this.results.insertAdjacentHTML('beforeend', html);
@@ -218,12 +223,12 @@ class Game {
 
         const html = `
             <div class="result row flex goal">
-                <div class="name">
+                <div class="name flex-dynamic">
                     <span>${this.city[NAME]}</span>
                     <span class="state">${States.byId(this.city[STATE])}</span>
                 </div>
-                <div class="dir reload clickable"><i class="fa-solid fa-arrow-rotate-right"></i></div>
-                <div class="dist show-result-details clickable"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="dir flex-fixed reload clickable"><i class="fa-solid fa-arrow-rotate-right"></i></div>
+                <div class="dist flex-fixed show-result-details clickable"><i class="fa-solid fa-circle-info"></i></div>
             </div>`;
 
         document.querySelector('.container').insertAdjacentHTML('beforeend', html);

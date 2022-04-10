@@ -1,0 +1,196 @@
+@use 'typography';
+@use 'media';
+@use 'vars';
+
+@import 'reset';
+@import 'themes';
+
+html {
+    @extend %default-font-style;
+}
+
+body {
+    background: var(--main-background-color);
+    color: var(--main-font-color);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+@import 'input';
+@import 'modal';
+@import 'container';
+@import 'autocomplete';
+
+h1 {
+    font-size: 2rem;
+    line-height: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+}
+
+.h1-line-height {
+    line-height: 2rem;
+}
+
+.h2-line-height {
+    line-height: 1.5rem;
+}
+
+.result {
+    padding: vars.$default-padding;
+    background: var(--main-container-color);
+
+    &.best {
+        background: var(--result-best-color);
+    }
+
+    &.perfect {
+        background: var(--result-perfect-color);
+    }
+
+    &.goal {
+        line-height: 1.5rem;
+
+        .name {
+            font-size: 1.5rem;
+        }
+    }
+
+    .dist {
+        width: 100px;
+
+        @include media.mobile {
+            width: 80px;
+        }
+    }
+
+    .state {
+        float: right;
+
+        @include media.mobile {
+            font-size: .8rem;
+            float: none;
+            display: block;
+        }
+    }
+
+    .dir {
+        width: 30px;
+        margin: 0 1rem;
+        text-align: center;
+
+        span {
+            padding: vars.$default-padding;
+            font-family: sans-serif;
+            font-size: 1.25rem;
+            line-height: 1rem;
+        }
+
+    }
+}
+
+.centered {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.slide-in {
+    animation: fadeIn 1s;
+}
+
+form {
+    position: relative;
+}
+
+.not-found {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    opacity: 0;
+    animation: fadeInOut 2s;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.toaster {
+    z-index: 1000;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.toaster .toast {
+    opacity: 0;
+    padding: 20px;
+    background: var(--main-container-color);
+    color: var(--main-font-color);
+}
+
+.map {
+    position: relative;
+    width: 100%;
+    max-height: 85%;
+    padding-top: 135.3658537%;
+}
+
+.map svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.map .map-point {
+    position: absolute;
+}
+
+.centered-marker {
+    transform: translate(-50%, -100%);
+}
+
+svg path {
+    stroke-width: 1px;
+    fill: #111;
+    stroke: var(--main-container-color);
+    stroke-linecap: round;
+}
+
+.width-90 {
+    width: 90%;
+    margin: 0 auto;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    16% {
+        opacity: 1;
+    }
+
+    84% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

@@ -1,0 +1,14 @@
+@use 'media';
+
+%default-font-style {
+    font-size: 20px;
+    line-height: 26px;
+    font-family: 'Roboto Slab', serif;
+    font-weight: 400;
+    font-style: normal;
+
+    @include media.mobile {
+        font-size: 16px;
+        line-height: 22px;
+    }
+}

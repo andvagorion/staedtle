@@ -12,13 +12,18 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 
-    <link href="style.css?v=0.4" rel="stylesheet" />
+    <link href="assets/app.css?v=0.5" rel="stylesheet" />
 </head>
 
-<body>
+<body class="dark">
 
     <div class="container">
-        <h1>Städtle</h1>
+        <div class="row flex">
+            <h1 class="flex-dynamic">Städtle</h1>
+            <div class="flex-fixed clickable"><i class="fa-solid fa-circle-half-stroke change-theme h1-line-height"></i>
+            </div>
+        </div>
+
         <div class="results"></div>
         <div class="input">
             <form>

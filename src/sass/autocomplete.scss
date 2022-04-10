@@ -1,0 +1,18 @@
+@use 'vars';
+
+.autocomplete {
+    max-height: 10rem;
+    overflow-y: auto;
+    background: var(--main-container-color);
+    z-index: 10;
+}
+
+.autocomplete-item {
+    padding: vars.$default-padding;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background: var(--main-hover-color);
+    cursor: pointer;
+}
