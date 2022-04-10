@@ -1,5 +1,4 @@
 /* global Cities, States, AutoComplete, Point, ResultDialog */
-/* exported Game */
 'use strict';
 
 const STATE = 0;
@@ -157,6 +156,8 @@ class Game {
             else if (b.dist < a.dist) { return b; }
             else { return a; }
         }, null);
+
+        Stats.storeGame(this.round, bestGuess.dist);
 
         const html = `
             <div class="result row flex goal">

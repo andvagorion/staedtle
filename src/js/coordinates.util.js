@@ -1,5 +1,3 @@
-/* exported Coordinates */
-
 class Coordinates {
     constructor(lon, lat) {
         this.lon = lon;

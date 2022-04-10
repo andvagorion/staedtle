@@ -1,4 +1,3 @@
-/* exported GeoUtils */
 'use strict';
 
 const GeoUtils = {

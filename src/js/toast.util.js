@@ -1,5 +1,3 @@
-/* exported Toast */
-
 const Toast = {
 
     toaster: null,

@@ -23,6 +23,8 @@ body {
 @import 'modal';
 @import 'container';
 @import 'autocomplete';
+@import 'stats';
+@import 'toast';
 
 h1 {
     font-size: 2rem;
@@ -121,20 +123,6 @@ form {
     cursor: pointer;
 }
 
-.toaster {
-    z-index: 1000;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-}
-
-.toaster .toast {
-    opacity: 0;
-    padding: 20px;
-    background: var(--main-container-color);
-    color: var(--main-font-color);
-}
-
 .map {
     position: relative;
     width: 100%;
@@ -177,4 +165,9 @@ svg path {
 .big-icon {
     font-size: 2rem;
     line-height: 1rem;
+}
+
+.show-stats,
+.change-theme {
+    padding-left: 1rem;
 }

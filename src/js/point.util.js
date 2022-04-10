@@ -1,4 +1,3 @@
-/* exported Point */
 'use strict';
 
 class Point {

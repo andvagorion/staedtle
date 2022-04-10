@@ -1,27 +1,29 @@
-/* global States, Point, Coordinates, Toast, GeoUtils */
-/* global MAP, NAME, LON, LAT, STATE */
-/* exported ResultDialog */
+'use strict';
 
 const BASE_PATH = 'https://stefangaertner.net/staedtle';
 const MAP_WIDTH = 410, MAP_HEIGHT = 555;
 
+// eslint-disable-next-line no-unused-vars
 class ResultDialog {
 
     open(options) {
         const html = `
             <div class="overlay"></div>
-            <div class="modal centered">
+            <div class="modal maybe-flex centered">
                 <div class="close-dialog big-icon in-corner clickable">
                     <i class="fa-solid fa-xmark"></i>
                 </div>
-                <div class="row">
+                <div class="flex-row">
                     <div class="map">
                         ${MAP}
                     </div>
                 </div>
-                <div class="row">
-                    <h2>${options.city[NAME]}</h2>
-                    <p>${States.byId(options.city[STATE])}</p>
+                <div class="flex-row">
+                    <div class="row"></div>
+                    <div class="row">
+                        <h2>${options.city[NAME]}</h2>
+                        <p>${States.byId(options.city[STATE])}</p>
+                    </div>
                     <div class="clickable share">
                         <i class="fa-solid fa-square-share-nodes"></i>
                         <span>Share / Challenge</span>
@@ -34,13 +36,7 @@ class ResultDialog {
         const targetCity = new Coordinates(options.city[LON], options.city[LAT]);
         this.addToMap(targetCity);
 
-        document.querySelector('.overlay').addEventListener('click', () => this.hide());
-        document.body.addEventListener('keydown', (evt) => {
-            if (evt.key === 'Escape') {
-                this.hide();
-            }
-        }, { once: true });
-        document.querySelector('.close-dialog').addEventListener('click', () => this.hide());
+        Modal.makeClosable();
 
         document.querySelector('.share').addEventListener('click', () => {
             const str = this.buildShareString(options);
@@ -115,13 +111,6 @@ class ResultDialog {
         const y = MAP_HEIGHT - ((totalWidth / 2 * Math.log((1 + Math.sin(lat)) / (1 - Math.sin(lat)))) - offsetY);
 
         return new Point(Math.round(x), Math.round(y));
-    }
-
-    hide() {
-        const overlay = document.querySelector('.overlay');
-        const modal = document.querySelector('.modal');
-        modal.remove();
-        overlay.remove();
     }
 
     copyToClipboard() {

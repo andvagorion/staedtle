@@ -1,4 +1,3 @@
-/* exported States */
 'use strict';
 
 class States {
@@ -22,5 +21,5 @@ class States {
     static byId = (str) => {
         const idx = parseInt(str) - 1;
         return States.names[idx];
-    }
+    };
 }

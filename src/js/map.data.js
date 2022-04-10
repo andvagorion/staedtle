@@ -1,5 +1,3 @@
-/* exported MAP */
-
 const MAP = `
 <svg
    version="1.1"

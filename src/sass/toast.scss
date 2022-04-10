@@ -1,0 +1,18 @@
+.toaster {
+    z-index: 1000;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    pointer-events: none;
+
+    .toast {
+        opacity: 0;
+        padding: 20px;
+        background: var(--main-container-color);
+        color: var(--main-font-color);
+
+        pointer-events: none;
+    }
+
+}

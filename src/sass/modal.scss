@@ -11,8 +11,6 @@
 }
 
 .modal {
-    display: flex;
-    flex-direction: row;
     width: 1000px;
 
     background: var(--main-container-color);
@@ -24,11 +22,10 @@
     z-index: 250;
 
     @include media.mobile {
-        display: block;
         width: 90%;
     }
 
-    .row {
+    .flex-row {
         width: 50%;
 
         @include media.mobile {

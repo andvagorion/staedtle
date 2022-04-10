@@ -1,0 +1,23 @@
+@use 'vars';
+
+.stats {
+
+    .round {
+        padding: vars.$default-padding;
+
+        .num {
+            width: 1.5rem;
+            text-align: center;
+            background: var(--main-border-color);
+        }
+
+        .line {
+            &>div {
+                background: var(--main-hover-color);
+                display: inline-block;
+            }
+        }
+
+    }
+
+}

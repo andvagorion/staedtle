@@ -1,4 +1,3 @@
-/* exported AutoComplete */
 'use strict';
 
 class AutoComplete {

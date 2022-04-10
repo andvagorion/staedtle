@@ -1,12 +1,21 @@
+@use 'media';
+
 .container {
     margin: 1em auto;
     width: 90%;
     max-width: 1000px;
 }
 
-.flex {
+.flex,
+.maybe-flex {
     display: flex;
     flex-direction: row;
+}
+
+.maybe-flex {
+    @include media.mobile {
+        display: block;
+    }
 }
 
 .flex-fixed {

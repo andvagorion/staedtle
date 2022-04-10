@@ -1,5 +1,3 @@
-/* exported Theme */
-
 const Theme = {
 
     switch: function () {
