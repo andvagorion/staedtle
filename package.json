@@ -2,8 +2,10 @@
   "name": "staedtle",
   "version": "1.0.0",
   "description": "Worldle like guessing game for German cities",
-  "main": "index.js",
-  "repository": "https://github.com/andvagorion/staedtle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andvagorion/staedtle.git"
+  },
   "author": "Stefan Gaertner",
   "license": "MIT",
   "devDependencies": {
@@ -20,7 +22,6 @@
     "uglify-js": "^3.15.4"
   },
   "scripts": {
-    "test": "mocha",
     "dist": "gulp"
   }
 }

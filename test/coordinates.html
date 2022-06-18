@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>Coordinates Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../dist/style.css">
+    <link rel="stylesheet" href="../dist/assets/app.css">
 </head>
 
 <body style="margin: 1em">
@@ -14,11 +14,7 @@
 
     </div>
 
-    <script type="text/javascript" src="../src/map.data.js"></script>
-    <script type="text/javascript" src="../src/point.util.js"></script>
-    <script type="text/javascript" src="../src/coordinates.util.js"></script>
-    <script type="text/javascript" src="../src/cities.data.js"></script>
-    <script type="text/javascript" src="../src/game.component.js"></script>
+    <script type="text/javascript" src="../dist/assets/app.min.js"></script>
     <script type="text/javascript">
 
         document.querySelector('.map').insertAdjacentHTML('beforeend', MAP);
@@ -26,7 +22,7 @@
         function addToMap(element) {
             const name = element[NAME];
             const coords = new Coordinates(element[LON], element[LAT]);
-            const pxCoords = Game.prototype.toPixels(coords);
+            const pxCoords = ResultDialog.prototype.toPixels(coords);
             const html = `<div class="map-point" 
                                style="left: ${pxCoords.x - 1}px; top: ${pxCoords.y - 1}px;
                                       
